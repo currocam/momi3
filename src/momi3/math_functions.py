@@ -11,7 +11,7 @@ from scipy.special import betaln, gammaln
 @jnp.vectorize
 @jax.jit
 def exp1(x):
-    x = jnp.array(x, dtype='float')
+    x = jnp.array(x, dtype="float")
     is_x_small = x < 1.0
     x_safe = jnp.where(is_x_small, 100.0, x)
     e1 = _expn1(1, x)

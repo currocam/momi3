@@ -6,7 +6,6 @@ import jax.numpy as jnp
 import networkx as nx
 import numpy as np
 import scipy
-import sparse
 from jax.scipy.special import gammaln as gammaln
 
 from momi3 import events
@@ -194,7 +193,7 @@ def sample_lift(
     params: Params,
     seed: int = None,
     quantile: float = 0.95,
-    min_lineages=4
+    min_lineages=4,
 ):
     """Samples surviving lineages and returns its user given quantile
 
@@ -318,7 +317,7 @@ def bound_sampler(
     scale: jnp.ndarray,
     seed: int = None,
     quantile: float = 0.95,
-    min_lineages: int = 4
+    min_lineages: int = 4,
 ):
     """Bound sampler for event tree
 
@@ -359,19 +358,21 @@ def bound_sampler(
                     #     n, ev, theta_train_sample, params, seed, quantile
                     # )
                 else:
-                    n = sample_lift(n, ev, theta_train_sample, params, seed, quantile, min_lineages)
+                    n = sample_lift(
+                        n, ev, theta_train_sample, params, seed, quantile, min_lineages
+                    )
                     NS[ev] = deepcopy(n)
-                    #print(ev.t1, "Lift", n)
+                    # print(ev.t1, "Lift", n)
                 seed = np.random.RandomState(seed).randint(2**31 - 1)
 
             elif isinstance(ev, events.Admix):
                 n = admix_quantiles(n, ev, params, quantile, min_lineages)
                 NS[ev] = deepcopy(n)
-                #print(u.t, "Admix", n)
+                # print(u.t, "Admix", n)
             elif isinstance(ev, events.Pulse):
                 n = pulse_quantiles(n, ev, params, quantile, min_lineages)
                 NS[ev] = deepcopy(n)
-                #print(u.t, "Pulse", n)
+                # print(u.t, "Pulse", n)
             elif isinstance(ev, events.Rename):
                 new, old = ev.new, ev.old
                 n[new] = n[old]
