@@ -680,7 +680,7 @@ class Params(dict):
                 "eta": lambda x: f"{int(x):d}",
                 "tau": lambda x: f"{int(x):d}",
                 "rho": lambda x: f"{x:.2g}",
-                "pi": lambda x: f"{(100*x):.2f}",
+                "pi": lambda x: f"{(100 * x):.2f}",
             }
 
         lxlim, rxlim = ret.get_xlim()
@@ -1336,7 +1336,7 @@ class LinearConstraints(object):
         G, G_nt = G[:, train_bool], G[:, np.logical_not(train_bool)]
         h = h - G_nt @ x_nt
 
-        nonzero = np.logical_not(np.alltrue(np.isclose(G, 0.0), 1))
+        nonzero = np.logical_not(np.all(np.isclose(G, 0.0), 1))
         G = G[nonzero, :]
         h = h[nonzero]
 
@@ -1344,7 +1344,7 @@ class LinearConstraints(object):
             A, A_nt = A[:, train_bool], A[:, np.logical_not(train_bool)]
             b = b - A_nt @ x_nt
 
-            nonzero = np.logical_not(np.alltrue(np.isclose(A, 0.0), 1))
+            nonzero = np.logical_not(np.all(np.isclose(A, 0.0), 1))
             A = A[nonzero, :]
             b = b[nonzero]
         else:
@@ -1693,7 +1693,7 @@ def get_html_repr(params):
         </tr>
     </thead>
     <tbody>
-    {body['table1']['SizeParam']}
+    {body["table1"]["SizeParam"]}
     </tbody>
     </table>
     <table border="1" style="width: 100%;">
@@ -1706,7 +1706,7 @@ def get_html_repr(params):
         </tr>
     </thead>
     <tbody>
-    {body['table1']['RateParam']}
+    {body["table1"]["RateParam"]}
     </tbody>
     </table>
     <table border="1" style="width: 100%;">
@@ -1719,7 +1719,7 @@ def get_html_repr(params):
         </tr>
     </thead>
     <tbody>
-    {body['table1']['ProportionParam']}
+    {body["table1"]["ProportionParam"]}
     </tbody>
     </table>
     <table border="1" style="width: 100%;">
@@ -1732,7 +1732,7 @@ def get_html_repr(params):
         </tr>
     </thead>
     <tbody>
-    {body['table1']['TimeParam']}
+    {body["table1"]["TimeParam"]}
     </tbody>
     </table>
     <table border="1" style="width: 100%;">
@@ -1758,7 +1758,7 @@ def get_html_repr(params):
         </tr>
     </thead>
     <tbody>
-    {body['table2']}
+    {body["table2"]}
     </tbody>
     </table>
 </div>
