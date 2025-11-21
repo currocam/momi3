@@ -18,7 +18,7 @@ dependencies = [
     "diffrax>=0.5",
     "frozendict>=2.0.2",
     "gmpy2>=2.1.5",
-    "jax>=0.4.26",
+    "jax>=0.4.26,<0.5.3",
     "jaxlib>=0.4.4",
     "jaxopt>=0.8.3",
     "joblib>=1.4.0",
@@ -47,7 +47,7 @@ Homepage = "https://github.com/jthlab/momi3/"
 
 [project.optional-dependencies]
 gpu = [
-    "jax[cuda12_pip]>=0.4.26",
+    "jax[cuda12_pip]>=0.4.26,<0.5.3",
 ]
 [tool.isort]
 profile = "black"
