@@ -1,4 +1,5 @@
 "miscellaneous shared functions that don't fit anywhere else"
+
 from collections import namedtuple
 from functools import partial
 from secrets import token_hex
@@ -7,7 +8,6 @@ from typing import NamedTuple, OrderedDict, Sequence, TypeVar
 import opt_einsum
 from jax import numpy as jnp
 from jax.tree_util import register_pytree_node_class
-from jax.util import safe_zip
 
 oe_einsum = partial(opt_einsum.contract, optimize="optimal", backend="jax")
 
@@ -56,7 +56,12 @@ class Axes(OrderedDict[Population, int]):
 
     @classmethod
     def tree_unflatten(cls, keys, values):
-        return OrderedDict(safe_zip(keys, values))
+        if len(keys) != len(values):
+            raise ValueError(
+                f"tree_unflatten: keys and values must have the same length "
+                f"(got {len(keys)} keys and {len(values)} values)"
+            )
+        return OrderedDict(zip(keys, values))
 
 
 class State(NamedTuple):
