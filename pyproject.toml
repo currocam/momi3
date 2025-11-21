@@ -47,7 +47,7 @@ Homepage = "https://github.com/jthlab/momi3/"
 
 [project.optional-dependencies]
 gpu = [
-    "jax[cuda12_pip]>=0.4.26,<0.5.3",
+    "jax[cuda12_pip]==0.4.26",
 ]
 [tool.isort]
 profile = "black"
