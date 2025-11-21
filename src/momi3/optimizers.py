@@ -6,11 +6,10 @@ import cvxpy
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import numpy as np
+import optax
 from jaxopt import ProjectedGradient
 from sparse import COO
 from tqdm.autonotebook import tqdm, trange
-
-import optax
 
 from momi3.Params import Params
 
@@ -58,7 +57,9 @@ def ProjectedGradient_optimizer(
         for paths, value in zip(theta_train_keys, theta_train):
             theta_train_dict[paths] = float(value)
         return negative_loglik_with_gradient(
-            params, jsfs, theta_train_dict, return_array=True
+            params,
+            jsfs,
+            theta_train_dict,
         )
 
     pg = ProjectedGradient(
@@ -145,9 +146,16 @@ def optax_step(optimizer, f, theta_train_dict, opt_state):
 
 
 def optax_for_momi(
-    optimizer, momi, params, jsfs, niter, transformed=True, theta_train_dict=None, opt_state=None, history=None
+    optimizer,
+    momi,
+    params,
+    jsfs,
+    niter,
+    transformed=True,
+    theta_train_dict=None,
+    opt_state=None,
+    history=None,
 ):
-
     if theta_train_dict is None:
         theta_train_dict = params.theta_train_dict(transformed)
 
@@ -168,8 +176,10 @@ def optax_for_momi(
         return v, g
 
     for i in trange(niter):
-        history['ttds'].append(dict(zip(train_keys, theta_train)))
-        theta_train, opt_state, loss_value = optax_step(optimizer, f, theta_train, opt_state)
-        history['LLs'].append(loss_value)
+        history["ttds"].append(dict(zip(train_keys, theta_train)))
+        theta_train, opt_state, loss_value = optax_step(
+            optimizer, f, theta_train, opt_state
+        )
+        history["LLs"].append(loss_value)
 
     return dict(zip(train_keys, theta_train)), opt_state, history

@@ -169,7 +169,6 @@ class Momi:
             params: Parameter values. Call Params(momi) to create one
             jsfs: Joint Site Frequency Spectrum. A n-dimensional array, where n is the number of leaf demes
             theta_train_dict: Dictionary for training values. See params._theta_train_dict
-            return_array: If true if will return tuple[float, jnp.ndarray] sorted by name of the variable
 
         Returns:
             tuple[float, dict[str, float]]: log-likelihood value and its gradient
@@ -226,7 +225,6 @@ class Momi:
             params: Parameter values. Call Params(momi) to create one
             jsfs: Joint Site Frequency Spectrum. A n-dimensional array, where n is the number of leaf demes
             theta_train_dict: Dictionary for training values. See params._theta_train_dict
-            return_array: If true if will return tuple[float, jnp.ndarray] sorted by name of the variable
 
         Returns:
             tuple[float, dict[str, float]]: Negative log-likelihood value and its gradient
