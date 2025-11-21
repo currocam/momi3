@@ -41,7 +41,7 @@ def ProjectedGradient_optimizer(
     htol: float = 0.0,
     monitor_training: bool = False,
 ) -> namedtuple:
-    stepsize = stepsize / jsfs.sum()  # scale the step size
+    stepsize = stepsize * jsfs.sum()  # scale the step size
 
     theta_train_keys = params._train_keys
 
@@ -56,11 +56,9 @@ def ProjectedGradient_optimizer(
         theta_train_dict = {}
         for paths, value in zip(theta_train_keys, theta_train):
             theta_train_dict[paths] = float(value)
-        return negative_loglik_with_gradient(
-            params,
-            jsfs,
-            theta_train_dict,
-        )
+        val, grad = negative_loglik_with_gradient(params, jsfs, theta_train_dict)
+        grad = jnp.array([grad[key] for key in theta_train_keys])
+        return val, grad
 
     pg = ProjectedGradient(
         fun=FwG,
@@ -88,6 +86,7 @@ def ProjectedGradient_optimizer(
         pg_state = pg.init_state(theta_train_0)
         loss = []
         theta_train_hat = theta_train_0.copy()
+        logliks = []
         for i in trange(maxiter):
             theta_train_hat, pg_state = pg.update(
                 theta_train_hat, pg_state, hyperparams_proj=(A, b, G, h)
@@ -104,7 +103,9 @@ def ProjectedGradient_optimizer(
                     show_boundry_message = False
 
             # Messages:
-            tqdm.write(f"loglik={-neg_log_lik:.5g}")
+            loglik = -neg_log_lik
+            logliks.append(loglik)
+            tqdm.write(f"loglik={loglik:.5g}")
             params_message = ", ".join(
                 [f"{i}={j:.2g}" for i, j in zip(theta_train_keys, theta_train_hat)]
             )
@@ -113,8 +114,8 @@ def ProjectedGradient_optimizer(
 
             loss.append(pg_state.error)
 
-        plt.plot(range(1, maxiter + 1), loss)
-        plt.ylabel("Error")  # TODO: Not sure what this error is
+        plt.plot(range(1, maxiter + 1), logliks)
+        plt.ylabel("Loglik")  # TODO: Not sure what this error is
         plt.xlabel("Iteration Number")
 
     else:
